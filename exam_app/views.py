@@ -10,7 +10,7 @@ import pandas as pd
 from django.db.models import Avg, Count
 from .forms import StudentRegistrationForm, QuestionUploadForm, ExamForm, QuestionForm
 from django.contrib.auth.models import User
-
+# start my first project
 def landing(request):
     return render(request, 'landing.html')
 
