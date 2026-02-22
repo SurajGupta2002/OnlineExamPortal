@@ -1,0 +1,58 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}{{ title }} | Utsav Portal{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <a href="{% url 'admin_exams' %}" class="text-indigo-600 font-bold hover:underline flex items-center mb-4">
+        <i class="fas fa-arrow-left mr-2"></i> Back to Exams
+    </a>
+    <h2 class="text-3xl font-bold text-gray-800">{{ title }}</h2>
+    <p class="text-gray-500">Enter the details of the examination below.</p>
+</div>
+
+<div class="max-w-2xl">
+    <div class="bg-white rounded-3xl shadow-sm border p-8">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="space-y-2">
+                <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-gray-700">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="text-xs text-gray-400">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                <div class="text-xs text-red-500 font-medium">
+                    {{ field.errors|striptags }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <script>
+                // Style Django forms inputs
+                document.querySelectorAll('input, textarea, select').forEach(el => {
+                    if (el.type !== 'checkbox' && el.type !== 'radio') {
+                        el.className = 'w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none';
+                    }
+                });
+            </script>
+
+            <div class="pt-4 flex gap-4">
+                <button type="submit" class="btn-premium flex-1 text-white font-bold py-4 rounded-2xl shadow-lg">
+                    <i class="fas fa-save mr-2"></i> {% if 'Edit' in title %}Update Exam{% else %}Save Exam{% endif %}
+                </button>
+                <a href="{% url 'admin_exams' %}"
+                    class="px-8 py-4 bg-gray-100 text-gray-600 font-bold rounded-2xl hover:bg-gray-200 transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

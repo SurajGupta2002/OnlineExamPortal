@@ -1,0 +1,114 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Manage Questions | {{ exam.title }}{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <a href="{% url 'admin_exams' %}" class="text-indigo-600 font-bold hover:underline flex items-center mb-4">
+        <i class="fas fa-arrow-left mr-2"></i> Back to Exams
+    </a>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-800">{{ exam.title }}</h2>
+            <p class="text-gray-500">Managing {{ questions|length }} questions in this bank.</p>
+        </div>
+        <button onclick="toggleAddForm()"
+            class="btn-premium text-white px-6 py-3 rounded-2xl flex items-center shadow-lg font-medium">
+            <i class="fas fa-plus mr-2"></i> Add Question
+        </button>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Question List -->
+    <div class="lg:col-span-2 space-y-6">
+        {% for q in questions %}
+        <div class="bg-white rounded-3xl border shadow-sm p-6 relative group">
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex-1">
+                    <span
+                        class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold uppercase tracking-wider rounded-full mb-2">Question
+                        #{{ forloop.counter }}</span>
+                    <p class="text-gray-800 font-medium text-lg leading-relaxed">{{ q.text }}</p>
+                </div>
+                <div class="p-2 bg-gray-50 rounded-xl text-gray-400 font-bold text-xs flex items-center gap-3">
+                    <span>{{ q.marks }} Marks</span>
+                    <a href="{% url 'admin_question_delete' q.id %}" class="text-red-300 hover:text-red-600 transition"
+                        onclick="return confirm('Delete this question?')">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                <div
+                    class="p-3 rounded-2xl border bg-gray-50 flex items-center {% if q.correct_answer == 1 %}border-green-200 bg-green-50 text-green-700{% endif %}">
+                    <span
+                        class="w-6 h-6 rounded-full bg-white border flex items-center justify-center text-[10px] font-bold mr-3 {% if q.correct_answer == 1 %}border-green-500 text-green-600{% endif %}">A</span>
+                    <span class="text-sm">{{ q.option1 }}</span>
+                    {% if q.correct_answer == 1 %}<i class="fas fa-check-circle ml-auto"></i>{% endif %}
+                </div>
+                <div
+                    class="p-3 rounded-2xl border bg-gray-50 flex items-center {% if q.correct_answer == 2 %}border-green-200 bg-green-50 text-green-700{% endif %}">
+                    <span
+                        class="w-6 h-6 rounded-full bg-white border flex items-center justify-center text-[10px] font-bold mr-3 {% if q.correct_answer == 2 %}border-green-500 text-green-600{% endif %}">B</span>
+                    <span class="text-sm">{{ q.option2 }}</span>
+                    {% if q.correct_answer == 2 %}<i class="fas fa-check-circle ml-auto"></i>{% endif %}
+                </div>
+                <div
+                    class="p-3 rounded-2xl border bg-gray-50 flex items-center {% if q.correct_answer == 3 %}border-green-200 bg-green-50 text-green-700{% endif %}">
+                    <span
+                        class="w-6 h-6 rounded-full bg-white border flex items-center justify-center text-[10px] font-bold mr-3 {% if q.correct_answer == 3 %}border-green-500 text-green-600{% endif %}">C</span>
+                    <span class="text-sm">{{ q.option3 }}</span>
+                    {% if q.correct_answer == 3 %}<i class="fas fa-check-circle ml-auto"></i>{% endif %}
+                </div>
+                <div
+                    class="p-3 rounded-2xl border bg-gray-50 flex items-center {% if q.correct_answer == 4 %}border-green-200 bg-green-50 text-green-700{% endif %}">
+                    <span
+                        class="w-6 h-6 rounded-full bg-white border flex items-center justify-center text-[10px] font-bold mr-3 {% if q.correct_answer == 4 %}border-green-500 text-green-600{% endif %}">D</span>
+                    <span class="text-sm">{{ q.option4 }}</span>
+                    {% if q.correct_answer == 4 %}<i class="fas fa-check-circle ml-auto"></i>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div
+            class="py-20 bg-white rounded-3xl border border-dashed flex flex-col items-center justify-center text-gray-400">
+            <i class="fas fa-tasks text-5xl mb-4 opacity-20"></i>
+            <p class="font-medium">No questions added yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Sticky Add/Edit Form -->
+    <div class="relative">
+        <div id="addForm" class="bg-white rounded-3xl shadow-sm border p-8 sticky top-8 transition-all">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Add New Question</h3>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="space-y-1">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">{{ field.label
+                        }}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="w-full btn-premium text-white font-bold py-4 rounded-2xl shadow-lg mt-4">
+                    Save Question
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('input, textarea, select').forEach(el => {
+        el.className = 'w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none text-sm';
+    });
+
+    function toggleAddForm() {
+        const form = document.getElementById('addForm');
+        form.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+{% endblock %}

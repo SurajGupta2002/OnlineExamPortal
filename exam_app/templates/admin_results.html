@@ -1,0 +1,70 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}All Results | Utsav Portal{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800">Exam Results</h2>
+    <p class="text-gray-500">Comprehensive view of all students' exam attempts and scores.</p>
+</div>
+
+<div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-gray-50 text-gray-400 text-xs font-bold uppercase tracking-wider border-b">
+                    <th class="px-8 py-5">Attempt ID</th>
+                    <th class="px-8 py-5">Student</th>
+                    <th class="px-8 py-5">Exam</th>
+                    <th class="px-8 py-5">Date & Time</th>
+                    <th class="px-8 py-5">Score</th>
+                    <th class="px-8 py-5 text-right">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for attempt in attempts %}
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-8 py-5 text-gray-400 font-mono text-sm">#{{ attempt.id }}</td>
+                    <td class="px-8 py-5">
+                        <div class="flex items-center">
+                            <div
+                                class="w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 text-[10px] font-bold mr-3">
+                                {{ attempt.user.username|first|upper }}
+                            </div>
+                            <span class="font-bold text-gray-800">{{ attempt.user.username }}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 font-medium text-gray-600">{{ attempt.exam.title }}</td>
+                    <td class="px-8 py-5">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-gray-700">{{ attempt.completed_at|date:"d M Y" }}</span>
+                            <span class="text-xs text-gray-400 font-medium">{{ attempt.completed_at|date:"h:i A"
+                                }}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span
+                            class="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100">
+                            {{ attempt.score }} Marks
+                        </span>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <span
+                            class="px-3 py-1 bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-widest rounded-full">
+                            Completed
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="px-8 py-20 text-center text-gray-400">
+                        <i class="fas fa-history text-5xl mb-4 opacity-20"></i>
+                        <p class="font-medium">No results found.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

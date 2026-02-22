@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Exam Instructions - {{ exam.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        <!-- Header -->
+        <div class="bg-indigo-600 px-8 py-8 text-white">
+            <h1 class="text-3xl font-bold">{{ exam.title }}</h1>
+            <p class="text-indigo-100 mt-2">Please read the following instructions carefully before starting the exam.
+            </p>
+        </div>
+
+        <div class="p-8">
+            <!-- Exam Info Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Duration</p>
+                    <p class="text-xl font-bold text-indigo-700">{{ exam.duration_minutes }} Min</p>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Questions</p>
+                    <p class="text-xl font-bold text-indigo-700">{{ exam.questions.count }}</p>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Pass Marks</p>
+                    <p class="text-xl font-bold text-indigo-700">{{ exam.pass_marks }}</p>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl text-center border border-indigo-100">
+                    <p class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">Type</p>
+                    <p class="text-xl font-bold text-indigo-700">MCQ</p>
+                </div>
+            </div>
+
+            <!-- Detailed Instructions -->
+            <div class="space-y-6 text-gray-700">
+                <section>
+                    <h3 class="text-lg font-bold text-gray-900 mb-3 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Important Instructions
+                    </h3>
+                    <ul class="list-disc ml-6 space-y-2">
+                        <li>Each question has 4 options, only one is correct.</li>
+                        <li>The timer will start as soon as you click the <strong>"Start Exam Now"</strong> button.</li>
+                        <li>You cannot pause the exam once started.</li>
+                        <li>The exam will be <strong>automatically submitted</strong> when the time ends.</li>
+                        <li>Do not refresh the page or click the back button during the exam.</li>
+                    </ul>
+                </section>
+
+                <section class="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+                    <h3 class="text-amber-800 font-bold mb-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                            </path>
+                        </svg>
+                        Disclaimer
+                    </h3>
+                    <p class="text-amber-700 text-sm italic">
+                        By clicking "Start Exam Now", you agree that you are ready and will not use any unfair means
+                        during the assessment.
+                    </p>
+                </section>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                <a href="{% url 'home' %}"
+                    class="flex-1 text-center bg-gray-100 text-gray-700 font-bold py-4 rounded-xl hover:bg-gray-200 transition">
+                    Go Back
+                </a>
+                <a href="{% url 'start_exam' exam.id %}"
+                    class="flex-1 text-center bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 text-lg">
+                    Start Exam Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

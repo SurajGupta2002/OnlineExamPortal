@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Online Exam System{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Available Exams</h1>
+    <p class="text-gray-500 mt-2">Select an exam to begin your assessment.</p>
+</div>
+
+{% if exams %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for exam in exams %}
+    <div class="bg-white rounded-xl shadow-sm border p-6 flex flex-col hover:shadow-md transition">
+        <h2 class="text-xl font-bold text-gray-800 mb-2">{{ exam.title }}</h2>
+        <p class="text-gray-600 mb-4 flex-grow">{{ exam.description|truncatewords:20 }}</p>
+        <div class="flex items-center space-x-4 mb-6 text-sm text-gray-500">
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {{ exam.duration_minutes }} mins
+            </span>
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                {{ exam.questions.count }} Questions
+            </span>
+        </div>
+        <a href="{% url 'exam_instructions' exam.id %}"
+            class="block text-center bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition">Start
+            Exam</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="bg-white rounded-xl p-12 text-center border">
+    <p class="text-gray-500 text-lg">No exams are currently available. Check back later!</p>
+</div>
+{% endif %}
+{% endblock %}

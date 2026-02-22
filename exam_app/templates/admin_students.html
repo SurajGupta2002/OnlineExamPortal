@@ -1,0 +1,78 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}Manage Students | Utsav Portal{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h2 class="text-3xl font-bold text-gray-800">Students</h2>
+    <p class="text-gray-500">View and manage all registered students and their performance.</p>
+</div>
+
+<div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-gray-50 text-gray-400 text-xs font-bold uppercase tracking-wider border-b">
+                    <th class="px-8 py-5">Student</th>
+                    <th class="px-8 py-5">Email</th>
+                    <th class="px-8 py-5">Total Attempts</th>
+                    <th class="px-8 py-5">Avg. Score</th>
+                    <th class="px-8 py-5 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for student in students %}
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-8 py-5">
+                        <div class="flex items-center">
+                            {% if student.profile and student.profile.profile_pic %}
+                            <img src="{{ student.profile.profile_pic.url }}"
+                                class="w-10 h-10 rounded-full border border-gray-100 mr-3">
+                            {% else %}
+                            <div
+                                class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold mr-3">
+                                {{ student.username|first|upper }}
+                            </div>
+                            {% endif %}
+                            <div>
+                                <p class="font-bold text-gray-800">{{ student.username }}</p>
+                                <p class="text-[10px] text-gray-400 font-medium">Joined {{ student.date_joined|date:"M
+                                    Y" }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-gray-500 font-medium">{{ student.email }}</td>
+                    <td class="px-8 py-5">
+                        <span
+                            class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full border border-blue-100 italic">
+                            {{ student.attempt_count }} Attempts
+                        </span>
+                    </td>
+                    <td class="px-8 py-5">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-gray-800">{{ student.avg_score|default:0|floatformat:1 }}</span>
+                            <div class="w-24 h-1.5 bg-gray-100 rounded-full mt-1">
+                                <div class="h-full bg-indigo-500 rounded-full"
+                                    style="width: {{ student.avg_score|default:0 }}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <button class="text-gray-400 hover:text-indigo-600 transition p-2">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-8 py-20 text-center text-gray-400">
+                        <i class="fas fa-user-slash text-5xl mb-4 opacity-20"></i>
+                        <p class="font-medium">No students registered yet.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
